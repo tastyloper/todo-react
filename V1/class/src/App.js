@@ -13,11 +13,6 @@ class App extends Component {
     navState: 'All'
   };
 
-  shouldComponentUpdate(nextProps, nextState) {
-    const valueStateChange = this.state.value !== nextState.value;    
-    return valueStateChange;
-  }
-
   valueChange = (e) => {
     this.setState({ value: e.target.value });
   }
