@@ -1,6 +1,9 @@
 import React, { useState, useCallback } from 'react';
-import cn from 'classnames';
 import './App.css';
+import TodoForm from './TodoForm';
+import TodoList from './TodoList';
+import TodoNav from './TodoNav';
+import TodoFooter from './TodoFooter';
 
 const App = () => {
   const [todos, setTodos] = useState([
@@ -10,7 +13,6 @@ const App = () => {
   ]);
   const [value, setValue] = useState('');
   const [navState, setNavState] = useState('All');
-  const navItems = ['All', 'Active', 'Completed'];
 
   const valueChange = useCallback((e) => {
     console.log('valueChange');
@@ -63,42 +65,11 @@ const App = () => {
     <>
       <div className="container">
         <h1 className="title">Todos</h1>
-        <div className="ver">Hooks 1.0</div>
-
-        <input className="input-todo" placeholder="What needs to be done?" autoFocus value={value} onChange={valueChange} onKeyUp={addTodo} />
-        <ul className="nav">
-          {navItems.map(item => (
-            <li id={item} key={item} className={cn({ active: navState === item })} onClick={() => (changeNav(item))}>{item}</li>
-          ))}
-        </ul>
-
-        <ul className="todos">
-          {todos.filter(todo => {
-            if (navState === 'Active') { return !todo.completed; }
-            if (navState === 'Completed') { return todo.completed; }
-            return true;
-          }).map(todo => {
-            return (
-              <li key={todo.id} id={todo.id} className="todo-item">
-                <input className="custom-checkbox" type="checkbox" id={`ck-${todo.id}`} checked={todo.completed} onChange={() => {changeCheck(todo.id)}} />
-                <label htmlFor={`ck-${todo.id}`}>{todo.content}</label>
-                <i className="remove-todo far fa-times-circle" onClick={() => {removeTodo(todo.id)}}></i>
-              </li>
-            );
-          })}
-        </ul>
-        <div className="footer">
-          <div className="complete-all">
-            <input className="custom-checkbox" type="checkbox" id="ck-complete-all" onChange={toggleCompletedAll} />
-            <label htmlFor="ck-complete-all">Mark all as complete</label>
-          </div>
-          <div className="clear-completed">
-            <button className="btn" onClick={clearAllDel}>Clear completed 
-              (<span className="completed-todos">{todos.filter(v => v.completed).length}</span>)
-            </button>
-            <strong className="active-todos">{todos.filter(v => !v.completed).length}</strong> items left
-          </div>
-        </div>
+        <div className="ver">Hooks 2.0</div>
+        <TodoForm value={value} valueChange={valueChange} addTodo={addTodo} />
+        <TodoNav navState={navState} changeNav={changeNav} />
+        <TodoList todos={todos} navState={navState} changeCheck={changeCheck} removeTodo={removeTodo} />
+        <TodoFooter toggleCompletedAll={toggleCompletedAll} clearAllDel={clearAllDel} todos={todos} />
       </div>
     </>
   );
